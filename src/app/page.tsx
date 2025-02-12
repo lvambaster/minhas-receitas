@@ -1,95 +1,132 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+import Link from "next/link";
+import { useState, useEffect } from 'react';
+import styles from './page.module.css';
 
-export default function Home() {
+// Definição da interface para Usuário
+interface User {
+  id: number;
+  name: string;
+  age: number;
+}
+
+export default function Users() {
+  const [users, setUsers] = useState<User[]>([]);
+  const [name, setName] = useState('');
+  const [age, setAge] = useState('');
+  const [nextId, setNextId] = useState(1);
+
+  // Carregar dados do LocalStorage
+  useEffect(() => {
+    const savedUsers = localStorage.getItem('users');
+
+    if (savedUsers) {
+      try {
+        const usersParsed: User[] = JSON.parse(savedUsers);  
+        setUsers(usersParsed);
+
+        // Atualiza o ID do próximo usuário
+        if (usersParsed.length > 0) {
+          const maxId = Math.max(...usersParsed.map((user: User) => user.id));  
+          setNextId(maxId + 1);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar os dados:', error);
+        setUsers([]);
+      }
+    } else {
+      setUsers([]);
+    }
+  }, []);
+
+  // Função para salvar os usuários
+  const saveUsers = (users: User[]) => {
+    try {
+      localStorage.setItem('users', JSON.stringify(users));
+    } catch (error) {
+      console.error('Erro ao salvar no LocalStorage:', error);
+    }
+  };
+
+  // Função para adicionar usuário
+  const handleAddUser = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!name || !age) {
+      alert('Por favor, preencha todos os campos.');
+      return;
+    }
+
+    const newUser = { id: nextId, name, age: parseInt(age) };
+    const updatedUsers = [...users, newUser];
+
+    setUsers(updatedUsers);
+    setNextId(nextId + 1);
+    setName('');
+    setAge('');
+    saveUsers(updatedUsers);
+  };
+
+  // Função para deletar usuário
+  const handleDeleteUser = (id: number) => {
+    const updatedUsers = users.filter((user) => user.id !== id);
+    setUsers(updatedUsers);
+    saveUsers(updatedUsers);
+  };
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <main className={styles.mainUser}>
+      <h1 className={styles.h1User}>Cadastro de Usuários</h1>
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+      <form onSubmit={handleAddUser} className={styles.formUser}>
+        <div className={styles.inputGroup}>
+          <label htmlFor="name" className={styles.labelUser}>Nome</label>
+          <input
+            id="name"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            className={styles.inputUser}
+          />
         </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+        <div className={styles.inputGroup}>
+          <label htmlFor="age" className={styles.labelUser}>Idade</label>
+          <input
+            id="age"
+            type="number"
+            value={age}
+            onChange={(e) => setAge(e.target.value)}
+            required
+            className={styles.inputUser}
           />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+        </div>
+        <button type="submit" className={styles.buttonUser}>Cadastrar</button>
+      </form>
+
+      <h2 className={styles.h2User}>Lista de Usuários</h2>
+      <ul className={styles.userList}>
+        {users.length === 0 ? (
+          <p className={styles.noUsersMessage}>Nenhum usuário cadastrado.</p>
+        ) : (
+          users.map((user: User) => (  
+            <li key={user.id} className={styles.userItem}>
+              <strong>ID: {user.id}</strong> - {user.name} - {user.age} anos
+              <button
+                onClick={() => handleDeleteUser(user.id)}
+                className={styles.deleteButton}
+              >
+                Deletar
+              </button>
+            </li>
+          ))
+        )}
+      </ul>
+
+      <div className={styles.navigationButtons}>
+        <Link href="/lancador"><button className={styles.navButton}>Cadastrar Receitas/Despesas</button></Link>
+        <Link href="/consultar"><button className={styles.navButton}>Consultar Receitas/Despesas</button></Link>
+      </div>
+    </main>
   );
 }
