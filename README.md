@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📊 Projeto de Teste Prático - Consulta de Finanças  
 
-## Getting Started
+Este projeto foi desenvolvido para facilitar o gerenciamento de receitas e despesas de diferentes usuários. Ele permite cadastrar transações financeiras e exibir um resumo visual através de tabelas e gráficos dinâmicos.  
 
-First, run the development server:
+## 🚀 Tecnologias Utilizadas  
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Next.js**: Framework React para desenvolvimento web.  
+- **Chart.js**: Biblioteca para visualização de gráficos.  
+- **LocalStorage**: Armazena os dados localmente no navegador.  
+- **CSS Modules**: Estilização personalizada do projeto.  
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Passo a Passo de Funcionamento  
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1️⃣ **Cadastro de Usuários**  
+- Acesse a tela principal.  
+- Insira o **nome** e a **idade** para e clique em **"Cadastrar Usuário"**.  
+- Os dados são salvos automaticamente no **LocalStorage** do navegador.  
 
-## Learn More
+### 2️⃣ **Lançamento de Receitas e Despesas**  
+- Clique em **"Cadastrar Receitas/Despesas"**.  
+- Insira a **descrição**, o **valor** e selecione se é uma **receita** ou **despesa** e escolha o **usuário** e clicque em **"Cadastrar Transação"** .  
+- A transação será salva localmente e vinculada ao usuário selecionado.  
 
-To learn more about Next.js, take a look at the following resources:
+### 3️⃣ **Consulta de Finanças**  
+- Acesse a tela **"Consultar Finanças"**.  
+- O sistema exibe:  
+  - Um **gráfico de barras interativo** com o total de receitas e despesas de cada usuário.  
+  - Uma **tabela detalhada**, mostrando os valores individuais e o saldo de cada usuário.  
+  - O **total geral** de todas as receitas, despesas e o saldo líquido.  
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 4️⃣ **Gráfico Interativo**  
+- O gráfico é gerado automaticamente usando a biblioteca **Chart.js**.  
+- Ele exibe a relação entre **receitas e despesas** de cada usuário.  
+- A atualização ocorre sempre que um novo lançamento é feito.  
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 5️⃣ **Armazenamento de Dados**  
+- Todos os dados (usuários e transações) são armazenados no **LocalStorage**.  
+- Isso garante que as informações não sejam perdidas ao recarregar a página.  
 
-## Deploy on Vercel
+  
+🎨 Melhorias Visuais
+✔️ Interface moderna e responsiva.
+✔️ Uso de CSS Modules para melhor organização do código.
+✔️ Layout intuitivo com botões de navegação entre páginas.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+📄 Licença
+Este projeto é de uso livre para fins de aprendizado e desenvolvimento.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
